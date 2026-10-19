@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>خارطة طريق وسم البيانات وتوصيفها | تدريب نماذج الذكاء الاصطناعي</title>
+<meta name="description" content="Bilingual starter roadmap for data annotation and labeling for AI and machine learning, AIADS, King Abdulaziz University." />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+<!-- PDF Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+  /* ─── Variables ─────────────────────────────────────── */
+  :root {
+    --primary:#1A3A6B; --primary-light:#2B5BA8; --deep:#0d2550;
+    --accent:#00A99D; --accent-dark:#007d74; --accent2:#F5A623;
+    --bg:#F4F6FA; --surface:#FFFFFF; --surface2:#EEF2F9;
+    --text:#1A2340; --text-muted:#3d4a63; --border:#D0D9E8;
+    --warn-bg:#FFF6E5; --warn-border:#F5A623;
+    --shadow:0 4px 24px rgba(26,58,107,0.10);
+    --radius:14px; --radius-sm:8px;
+  }
+
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth; }
+  body {
+    font-family:'Cairo','Noto Sans Arabic','Tajawal',sans-serif;
+    background:var(--bg); color:var(--text);
+    font-size:16px; line-height:1.85; direction:rtl;
+  }
+  body.ltr { font-family:'Inter','Roboto','Open Sans',sans-serif; direction:ltr; line-height:1.7; }
+  a { color:var(--primary-light); }
+
+  /* language visibility */
+  body:not(.ltr) [data-lang="en"] { display:none !important; }
+  body.ltr [data-lang="ar"] { display:none !important; }
+
+  /* ─── Top bar ───────────────────────────────────────── */
+  .topbar {
+    background:linear-gradient(135deg,#0d2550 0%,#1A3A6B 60%,#00A99D 100%);
+    color:#fff; padding:0 32px; min-height:72px;
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    position:sticky; top:0; z-index:100; box-shadow:0 2px 16px rgba(0,0,0,0.18);
+  }
+  .topbar-brand { display:flex; align-items:center; gap:12px; min-width:0; }
+  .topbar-logo {
+    width:44px; height:44px; flex-shrink:0; border-radius:10px;
+    background:rgba(255,255,255,0.15); border:2px solid rgba(255,255,255,0.3);
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px;
+  }
+  .topbar-title { font-size:1.02rem; font-weight:700; }
+  .topbar-sub { font-size:0.8rem; opacity:0.85; }
+  .topbar-actions { display:flex; gap:10px; flex-shrink:0; }
+  .btn-lang, .btn-pdf {
+    border:none; border-radius:8px; padding:8px 18px; font-family:inherit;
+    font-size:0.9rem; font-weight:700; cursor:pointer; transition:all .2s;
+    display:flex; align-items:center; gap:6px;
+  }
+  .btn-lang { background:rgba(255,255,255,0.15); color:#fff; border:1.5px solid rgba(255,255,255,0.4); }
+  .btn-lang:hover { background:rgba(255,255,255,0.28); }
+  .btn-pdf { background:var(--accent2); color:#1A2340; }
+  .btn-pdf:hover { background:#e0941a; }
+  .btn-pdf[disabled] { opacity:.7; cursor:wait; }
+
+  /* ─── Hero ──────────────────────────────────────────── */
+  .hero {
+    background:linear-gradient(135deg,#0d2550 0%,#1A3A6B 50%,#1a5276 100%);
+    color:#fff; padding:60px 40px 52px; text-align:center; position:relative; overflow:hidden;
+  }
+  .hero::before { content:''; position:absolute; inset:0;
+    background:radial-gradient(circle at 70% 30%,rgba(0,169,157,0.2) 0%,transparent 60%); }
+  .hero > * { position:relative; }
+  .hero-badge {
+    display:inline-block; background:rgba(0,169,157,0.22); border:1.5px solid rgba(0,169,157,0.55);
+    color:#bff8f4; border-radius:30px; padding:5px 20px; font-size:0.85rem; font-weight:600; margin-bottom:20px;
+  }
+  .hero h1 { font-size:clamp(1.8rem,4vw,3rem); font-weight:800; line-height:1.3; margin-bottom:12px; }
+  .hero h1 span { color:#5ef5ec; }
+  .hero-lead { max-width:760px; margin:0 auto; font-size:1.05rem; opacity:0.92; }
+  .hero-meta { display:flex; justify-content:center; flex-wrap:wrap; gap:10px; margin-top:24px; }
+  .hero-meta span {
+    background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.25);
+    border-radius:20px; padding:4px 14px; font-size:0.85rem;
+  }
+
+  /* ─── Layout ────────────────────────────────────────── */
+  .page-wrap { max-width:1100px; margin:0 auto; padding:40px 24px 60px; }
+
+  .toc-card {
+    background:var(--surface); border-radius:var(--radius); box-shadow:var(--shadow);
+    padding:26px 30px; margin-bottom:32px; border-inline-start:5px solid var(--primary);
+  }
+  .toc-card h2 { font-size:1.15rem; font-weight:800; color:var(--primary); margin-bottom:14px; }
+  .toc-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:6px; }
+  .toc-item {
+    display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--primary-light);
+    font-size:0.93rem; padding:6px 10px; border-radius:6px; transition:background .18s;
+  }
+  .toc-item:hover { background:var(--surface2); color:var(--primary); }
+  .toc-num {
+    background:var(--primary); color:#fff; border-radius:50%; min-width:24px; height:24px;
+    display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; flex-shrink:0;
+  }
+
+  .section-card {
+    background:var(--surface); border-radius:var(--radius); box-shadow:var(--shadow);
+    padding:34px 38px; margin-bottom:26px; scroll-margin-top:90px;
+  }
+  .section-header {
+    display:flex; align-items:center; gap:14px; margin-bottom:20px; padding-bottom:14px;
+    border-bottom:2px solid var(--surface2);
+  }
+  .section-icon {
+    width:46px; height:46px; border-radius:12px; flex-shrink:0;
+    background:linear-gradient(135deg,var(--primary),var(--accent));
+    display:flex; align-items:center; justify-content:center; font-size:20px; color:#fff;
+  }
+  .section-title { font-size:1.35rem; font-weight:800; color:var(--primary); line-height:1.4; }
+  .section-sub { font-size:0.88rem; color:var(--text-muted); margin-top:2px; }
+
+  .prose p { margin-bottom:12px; font-size:0.98rem; }
+  .prose p:last-child { margin-bottom:0; }
+  .prose strong, .strong { color:var(--primary); font-weight:700; }
+
+  h3.sub-h { font-size:1.08rem; color:var(--primary); font-weight:800; margin:24px 0 10px; }
+
+  /* key point / warning / info */
+  .key-point {
+    background:linear-gradient(135deg,var(--primary),var(--primary-light)); color:#fff;
+    border-radius:var(--radius-sm); padding:18px 22px; margin-top:18px; display:flex; gap:14px; align-items:flex-start;
+  }
+  .key-point .kp-icon { font-size:22px; flex-shrink:0; }
+  .key-point strong { color:#ffe1a8; }
+  .note {
+    background:var(--warn-bg); border-inline-start:4px solid var(--warn-border);
+    border-radius:var(--radius-sm); padding:14px 18px; margin-top:16px; font-size:0.93rem;
+    display:flex; gap:12px; align-items:flex-start;
+  }
+  .note .n-icon { font-size:18px; flex-shrink:0; }
+
+  /* cards */
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:18px; margin-top:6px; }
+  .card {
+    background:var(--surface2); border-radius:var(--radius-sm); padding:20px 22px;
+    border-top:3px solid var(--accent);
+  }
+  .card-title { font-weight:800; color:var(--primary); font-size:1.02rem; margin-bottom:8px; display:flex; gap:8px; align-items:center; }
+  .card p { font-size:0.92rem; color:var(--text-muted); }
+  .card ul { list-style:none; margin-top:6px; }
+  .card li { font-size:0.92rem; padding:5px 0; border-bottom:1px dashed var(--border); color:var(--text); }
+  .card li:last-child { border-bottom:none; }
+  .card li b { color:var(--primary); }
+  .tag {
+    display:inline-block; font-size:0.74rem; font-weight:700; border-radius:5px; padding:1px 8px;
+    background:#dff5f3; color:var(--accent-dark); margin-inline-start:4px; vertical-align:middle;
+  }
+
+  /* roadmap stages */
+  .roadmap { position:relative; margin-top:10px; }
+  .roadmap::before {
+    content:''; position:absolute; top:10px; bottom:10px; inset-inline-start:23px; width:3px;
+    background:linear-gradient(var(--primary),var(--accent)); border-radius:3px;
+  }
+  .stage { position:relative; display:flex; gap:18px; margin-bottom:18px; }
+  .stage:last-child { margin-bottom:0; }
+  .stage-num {
+    width:48px; height:48px; border-radius:50%; flex-shrink:0; z-index:1;
+    background:var(--primary); color:#fff; font-weight:800; font-size:1.1rem;
+    display:flex; align-items:center; justify-content:center; border:4px solid var(--surface);
+    box-shadow:0 0 0 2px var(--accent);
+  }
+  .stage-body { flex:1; background:var(--surface2); border-radius:var(--radius-sm); padding:16px 20px; }
+  .stage-title { font-weight:800; color:var(--primary); font-size:1.05rem; }
+  .stage-goal { font-size:0.93rem; margin:4px 0 10px; }
+  .stage-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .stage-box { background:var(--surface); border-radius:6px; padding:10px 14px; font-size:0.88rem; }
+  .stage-box .lbl { font-weight:800; font-size:0.8rem; color:var(--accent-dark); display:block; margin-bottom:2px; }
+
+  /* tables */
+  .table-wrap { overflow-x:auto; margin-top:14px; border-radius:var(--radius-sm); border:1px solid var(--border); }
+  table { width:100%; border-collapse:collapse; font-size:0.92rem; }
+  thead tr { background:var(--primary); color:#fff; }
+  th { padding:12px 14px; text-align:start; font-weight:700; }
+  td { padding:11px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+  tbody tr:nth-child(even) { background:var(--surface2); }
+  tbody tr:last-child td { border-bottom:none; }
+  td:first-child { font-weight:700; color:var(--primary); white-space:nowrap; }
+
+  /* funnel */
+  .funnel { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:8px; }
+  .funnel-step {
+    background:var(--surface2); border-radius:var(--radius-sm); padding:16px; text-align:center;
+    border-bottom:4px solid var(--accent);
+  }
+  .funnel-step .fs-n { font-size:0.78rem; font-weight:800; color:var(--accent-dark); }
+  .funnel-step .fs-t { font-weight:800; color:var(--primary); margin:2px 0 6px; }
+  .funnel-step p { font-size:0.86rem; color:var(--text-muted); line-height:1.6; }
+
+  /* formula */
+  .formula {
+    background:var(--deep); color:#fff; border-radius:var(--radius-sm); padding:14px 18px; margin-top:12px;
+    font-family:'Inter',sans-serif; text-align:center; direction:ltr; font-size:1rem;
+  }
+  .formula .frac { display:inline-flex; flex-direction:column; vertical-align:middle; margin:0 6px; text-align:center; }
+  .formula .frac span:first-child { border-bottom:1.5px solid #fff; padding:0 6px; }
+
+  /* loop */
+  .loop { display:flex; flex-wrap:wrap; gap:10px; align-items:stretch; margin-top:10px; }
+  .loop-step {
+    flex:1 1 150px; background:var(--surface2); border-radius:var(--radius-sm); padding:12px 14px;
+    font-size:0.88rem; border-inline-start:3px solid var(--accent);
+  }
+  .loop-step b { display:block; color:var(--primary); }
+
+  /* checklist */
+  .checklist { list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:8px 18px; margin-top:8px; }
+  .checklist li { display:flex; gap:10px; align-items:flex-start; font-size:0.93rem; padding:6px 0; }
+  .checklist input { width:18px; height:18px; margin-top:5px; accent-color:var(--accent); flex-shrink:0; }
+
+  /* resources */
+  .res-group { margin-top:18px; }
+  .res-group h4 { font-size:0.98rem; color:var(--primary); font-weight:800; margin-bottom:8px; }
+  .res-list { list-style:none; display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:10px; }
+  .res-list li {
+    background:var(--surface2); border-radius:var(--radius-sm); padding:12px 14px; font-size:0.9rem;
+  }
+  .res-list a { font-weight:700; text-decoration:none; }
+  .res-list a:hover { text-decoration:underline; }
+  .res-list .r-org { display:block; font-size:0.8rem; color:var(--text-muted); }
+
+  /* disclosure */
+  .disclosure-table td:first-child { white-space:normal; }
+
+  /* references */
+  .ref-list { list-style:none; counter-reset:ref; margin-top:8px; }
+  .ref-list li {
+    counter-increment:ref; position:relative; padding:10px 0; padding-inline-start:40px;
+    border-bottom:1px solid var(--border); font-size:0.9rem;
+  }
+  .ref-list li:last-child { border-bottom:none; }
+  .ref-list li::before {
+    content:counter(ref); position:absolute; inset-inline-start:0; top:11px;
+    width:26px; height:26px; border-radius:50%; background:var(--surface2); color:var(--primary);
+    font-weight:800; font-size:0.78rem; display:flex; align-items:center; justify-content:center;
+  }
+  .ref-org { font-weight:700; color:var(--accent-dark); }
+  .ref-list a { word-break:break-all; }
+  .ref-en { direction:ltr; unicode-bidi:isolate; }
+
+  /* footer */
+  .footer {
+    background:#0d2550; color:#e9eef7; text-align:center; padding:30px 24px; font-size:0.92rem; line-height:1.9;
+  }
+  .footer strong { color:#fff; }
+  .footer-divider { margin:10px auto; width:60px; height:2px; background:var(--accent); }
+  .footer-year { color:#5ef5ec; font-weight:700; }
+
+  /* ─── Responsive ────────────────────────────────────── */
+  @media (max-width:760px) {
+    .topbar { flex-direction:column; align-items:stretch; padding:12px 16px; gap:10px; position:static; }
+    .topbar-actions { justify-content:center; }
+    .hero { padding:38px 16px; }
+    .page-wrap { padding:22px 16px 40px; }
+    .section-card { padding:22px 16px; }
+    .stage-row, .checklist { grid-template-columns:1fr; }
+    .funnel { grid-template-columns:1fr 1fr; }
+    .stage { gap:12px; }
+    .stage-num { width:40px; height:40px; font-size:1rem; }
+    .roadmap::before { inset-inline-start:19px; }
+    td:first-child { white-space:normal; }
+  }
+
+  /* ─── Print / PDF ───────────────────────────────────── */
+  .pdf-mode .topbar { display:none; }
+  .pdf-mode .section-card { box-shadow:none; border:1px solid #d6deea; }
+  .pdf-mode .table-wrap { overflow:visible; }
+  @media print {
+    .topbar { display:none !important; }
+    body { background:#fff; }
+    .section-card { box-shadow:none; border:1px solid #d6deea; }
+    .card, .stage, .funnel-step, tr, .res-list li, .ref-list li, .key-point, .note { break-inside:avoid; }
+    .hero, .footer, .key-point, thead tr, .stage-num, .toc-num, .section-icon, .formula {
+      print-color-adjust:exact; -webkit-print-color-adjust:exact;
+    }
+    .table-wrap { overflow:visible; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════ TOP BAR ══════════ -->
+<header class="topbar">
+  <div class="topbar-brand">
+    <div class="topbar-logo">AI</div>
+    <div>
+      <div class="topbar-title" data-lang="ar">خارطة طريق وسم البيانات وتوصيفها</div>
+      <div class="topbar-title" data-lang="en">Data Annotation &amp; Labeling Roadmap</div>
+      <div class="topbar-sub" data-lang="ar">مركز AIADS، جامعة الملك عبدالعزيز</div>
+      <div class="topbar-sub" data-lang="en">AIADS Center, King Abdulaziz University</div>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn-lang" onclick="toggleLang()" id="langBtn" aria-label="Switch language">🌐 English</button>
+    <button class="btn-pdf" onclick="downloadPDF()" id="pdfBtn">⬇ <span data-lang="ar">تحميل PDF</span><span data-lang="en">Download PDF</span></button>
+  </div>
+</header>
+
+<div id="content-to-export">
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero">
+  <div class="hero-badge" data-lang="ar">🎓 دليل تعليمي، مركز التميز البحثي في الذكاء الاصطناعي وعلم البيانات</div>
+  <div class="hero-badge" data-lang="en">🎓 Educational Guide | Center for Research Excellence in Artificial Intelligence &amp; Data Science</div>
+
+  <h1 data-lang="ar">خارطة طريق <span>وسم البيانات وتوصيفها</span><br>لتدريب نماذج الذكاء الاصطناعي</h1>
+  <h1 data-lang="en">A Starter Roadmap to <span>Data Annotation</span><br>&amp; Labeling for AI</h1>
+
+  <p class="hero-lead" data-lang="ar">دليل مختصر يرسم المسار من البيانات الخام إلى مجموعة تدريب موثوقة: ما الذي تحتاج إلى فهمه، وبأي ترتيب تعمل، وأين تجد المزيد. التفاصيل المتعمقة متاحة في قسم المصادر.</p>
+  <p class="hero-lead" data-lang="en">A concise guide that maps the path from raw data to a reliable training dataset: what to understand, in what order to work, and where to learn more. In-depth detail is left to the resources section.</p>
+
+  <div class="hero-meta">
+    <span data-lang="ar">المستوى: مبتدئ إلى متوسط</span><span data-lang="en">Level: Beginner to Intermediate</span>
+    <span data-lang="ar">الفئة: الباحثون وطلبة الدراسات العليا وفرق المشاريع</span><span data-lang="en">For: researchers, graduate students, project teams</span>
+    <span data-lang="ar">وقت القراءة: نحو 15 دقيقة</span><span data-lang="en">Reading time: about 15 minutes</span>
+  </div>
+</section>
+
+<div class="page-wrap">
+
+  <!-- ══════════ TOC ══════════ -->
+  <nav class="toc-card" aria-label="Contents">
+    <h2 data-lang="ar">📑 محتويات الدليل</h2>
+    <h2 data-lang="en">📑 Contents</h2>
+    <div class="toc-grid">
+      <a href="#why" class="toc-item"><div class="toc-num">1</div><span data-lang="ar">لماذا تحدد جودة البيانات نجاح النموذج؟</span><span data-lang="en">Why data quality decides success</span></a>
+      <a href="#types" class="toc-item"><div class="toc-num">2</div><span data-lang="ar">أنواع الوسم وأساليبه</span><span data-lang="en">Annotation types &amp; methods</span></a>
+      <a href="#roadmap" class="toc-item"><div class="toc-num">3</div><span data-lang="ar">خارطة الطريق: ست مراحل</span><span data-lang="en">The roadmap: six stages</span></a>
+      <a href="#workforce" class="toc-item"><div class="toc-num">4</div><span data-lang="ar">الوسم العام مقابل وسم الخبراء</span><span data-lang="en">General vs. expert labeling</span></a>
+      <a href="#onboarding" class="toc-item"><div class="toc-num">5</div><span data-lang="ar">تأهيل الخبراء والتحقق من مهاراتهم</span><span data-lang="en">Onboarding expert annotators</span></a>
+      <a href="#qa" class="toc-item"><div class="toc-num">6</div><span data-lang="ar">ضمان الجودة ومقاييسها</span><span data-lang="en">Quality assurance &amp; metrics</span></a>
+      <a href="#security" class="toc-item"><div class="toc-num">7</div><span data-lang="ar">خصوصية البيانات وأمنها</span><span data-lang="en">Data privacy &amp; security</span></a>
+      <a href="#scale" class="toc-item"><div class="toc-num">8</div><span data-lang="ar">التوسع بالوسم الذكي</span><span data-lang="en">Scaling with smart labeling</span></a>
+      <a href="#checklist" class="toc-item"><div class="toc-num">9</div><span data-lang="ar">قائمة التحقق قبل الانطلاق</span><span data-lang="en">Pre-launch checklist</span></a>
+      <a href="#learn" class="toc-item"><div class="toc-num">10</div><span data-lang="ar">مصادر للتعمق</span><span data-lang="en">Resources to go deeper</span></a>
+      <a href="#disclosure" class="toc-item"><div class="toc-num">11</div><span data-lang="ar">الإفصاح عن استخدام الذكاء الاصطناعي</span><span data-lang="en">AI disclosure</span></a>
+      <a href="#refs" class="toc-item"><div class="toc-num">12</div><span data-lang="ar">المصادر والمراجع</span><span data-lang="en">Sources &amp; references</span></a>
+    </div>
+  </nav>
+
+  <!-- ══════════ 1. WHY ══════════ -->
+  <section class="section-card" id="why">
+    <div class="section-header">
+      <div class="section-icon">🎯</div>
+      <div>
+        <div class="section-title" data-lang="ar">1. لماذا تحدد جودة البيانات نجاح النموذج؟</div>
+        <div class="section-title" data-lang="en">1. Why Data Quality Decides Model Success</div>
+      </div>
+    </div>
+    <div class="prose">
+      <p data-lang="ar"><strong>وسم البيانات وتوصيفها</strong> هو تحويل البيانات الخام (صور، نصوص، صوت، فيديو) إلى بيانات منظمة تحمل وسوما تمثل "الحقيقة المرجعية" التي يتعلم منها النموذج. والنموذج يتعلم ما في البيانات كما هو: إذا كانت الوسوم غير متسقة أو منحازة، تعلم النموذج هذه العيوب نفسها.</p>
+      <p data-lang="en"><strong>Data annotation and labeling</strong> converts raw data (images, text, audio, video) into structured examples carrying labels that serve as the "ground truth" a model learns from. A model learns whatever the data contains: if labels are inconsistent or biased, the model learns those same flaws.</p>
+      <p data-lang="ar">وهذه ليست مشكلة نظرية؛ فقد وثقت دراسة من MIT أخطاء وسم في مجموعات اختبار معيارية شائعة الاستخدام بلغت في المتوسط نحو 3.3%، وهو ما يكفي لتغيير ترتيب النماذج عند المقارنة بينها <a href="#refs">[3]</a>. كما بينت دراسة من Google أن ضعف العناية بالبيانات يولد "سلاسل أخطاء" تظهر آثارها متأخرة في مراحل النشر <a href="#refs">[4]</a>.</p>
+      <p data-lang="en">This is not a theoretical concern: an MIT study documented label errors averaging about 3.3% across widely used benchmark test sets, enough to change how models rank against each other <a href="#refs">[3]</a>. A Google study showed that under-investing in data work produces "data cascades" whose effects surface late, at deployment <a href="#refs">[4]</a>.</p>
+    </div>
+    <div class="key-point">
+      <div class="kp-icon">💡</div>
+      <div data-lang="ar"><strong>الفكرة الأساسية:</strong> تعامل مع الوسم بوصفه عملية هندسية لها مواصفات ومراحل ونقاط فحص، لا مهمة إدخال بيانات جانبية.</div>
+      <div data-lang="en"><strong>Core idea:</strong> treat annotation as an engineered process with specifications, stages and checkpoints, not as a side data-entry task.</div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2. TYPES ══════════ -->
+  <section class="section-card" id="types">
+    <div class="section-header">
+      <div class="section-icon">🗂️</div>
+      <div>
+        <div class="section-title" data-lang="ar">2. أنواع الوسم وأساليبه</div>
+        <div class="section-title" data-lang="en">2. Annotation Types &amp; Methods</div>
+        <div class="section-sub" data-lang="ar">اختر الأسلوب وفق نوع البيانات والمهمة التي سيؤديها النموذج</div>
+        <div class="section-sub" data-lang="en">Choose the method based on the data modality and the task the model will perform</div>
+      </div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">📷 <span data-lang="ar">الرؤية الحاسوبية</span><span data-lang="en">Computer Vision</span></div>
+        <ul>
+          <li data-lang="ar"><b>الصناديق المحيطة:</b> مستطيل حول كل كائن؛ مناسبة لاكتشاف الأجسام.</li>
+          <li data-lang="en"><b>Bounding boxes:</b> a rectangle around each object; suited to object detection.</li>
+          <li data-lang="ar"><b>المضلعات:</b> حدود دقيقة للأشكال غير المنتظمة، مثل صور الأقمار الصناعية.</li>
+          <li data-lang="en"><b>Polygons:</b> precise outlines for irregular shapes, such as satellite imagery.</li>
+          <li data-lang="ar"><b>التجزئة الدلالية:</b> تصنيف كل بكسل، مثل فصل الطريق عن الرصيف.</li>
+          <li data-lang="en"><b>Semantic segmentation:</b> a class for every pixel, e.g. road vs. sidewalk.</li>
+          <li data-lang="ar"><b>النقاط المفتاحية:</b> مواضع المفاصل أو ملامح الوجه لتتبع الحركة والوضعية.</li>
+          <li data-lang="en"><b>Keypoints:</b> joints or facial landmarks to track pose and movement.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">📝 <span data-lang="ar">معالجة اللغات الطبيعية</span><span data-lang="en">Natural Language Processing</span></div>
+        <ul>
+          <li data-lang="ar"><b>التعرف على الكيانات المسماة (NER):</b> تحديد الأشخاص والأماكن والتواريخ في النص.</li>
+          <li data-lang="en"><b>Named Entity Recognition (NER):</b> marking people, places and dates in text.</li>
+          <li data-lang="ar"><b>تصنيف المشاعر والنية:</b> إيجابي أو سلبي أو محايد، أو هدف المستخدم من الرسالة.</li>
+          <li data-lang="en"><b>Sentiment &amp; intent:</b> positive, negative or neutral, or the user's goal.</li>
+          <li data-lang="ar"><b>تصنيف النصوص:</b> فئات عامة للوثائق، مثل تصنيف طلبات الدعم.</li>
+          <li data-lang="en"><b>Text classification:</b> broad categories for documents, e.g. routing support tickets.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">🤖 <span data-lang="ar">الذكاء التوليدي والنماذج اللغوية الكبيرة</span><span data-lang="en">Generative AI &amp; LLMs</span></div>
+        <ul>
+          <li data-lang="ar"><b>بيانات الضبط الدقيق الموجه (SFT):</b> أزواج من التعليمات والإجابات النموذجية.</li>
+          <li data-lang="en"><b>Supervised fine-tuning (SFT):</b> pairs of instructions and model answers.</li>
+          <li data-lang="ar"><b>التعلم المعزز من التغذية الراجعة البشرية (RLHF):</b> ترتيب عدة إجابات حسب الدقة والفائدة والسلامة <a href="#refs">[7]</a>.</li>
+          <li data-lang="en"><b>RLHF:</b> ranking several model answers by accuracy, helpfulness and safety <a href="#refs">[7]</a>.</li>
+          <li data-lang="ar"><b>الاختبار العدائي (Red Teaming):</b> مطالبات عدائية لكشف المخرجات الضارة ووسمها لأغراض السلامة.</li>
+          <li data-lang="en"><b>Red teaming:</b> adversarial prompts to surface harmful outputs and label them for safety.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3. ROADMAP ══════════ -->
+  <section class="section-card" id="roadmap">
+    <div class="section-header">
+      <div class="section-icon">🧭</div>
+      <div>
+        <div class="section-title" data-lang="ar">3. خارطة الطريق: ست مراحل</div>
+        <div class="section-title" data-lang="en">3. The Roadmap: Six Stages</div>
+        <div class="section-sub" data-lang="ar">لكل مرحلة هدف، وإجراء رئيسي، ونقطة فحص قبل الانتقال لما بعدها</div>
+        <div class="section-sub" data-lang="en">Each stage has a goal, a key action, and a checkpoint before you move on</div>
+      </div>
+    </div>
+
+    <div class="roadmap">
+      <div class="stage">
+        <div class="stage-num">1</div>
+        <div class="stage-body">
+          <div class="stage-title" data-lang="ar">تعريف مخطط التصنيفات (Ontology)</div>
+          <div class="stage-title" data-lang="en">Define the labeling schema (ontology)</div>
+          <div class="stage-goal" data-lang="ar">حدد الفئات قبل فتح أي أداة، واجعلها متنافية قدر الإمكان.</div>
+          <div class="stage-goal" data-lang="en">Fix the classes before opening any tool, and keep them mutually exclusive where possible.</div>
+          <div class="stage-row">
+            <div class="stage-box"><span class="lbl" data-lang="ar">الإجراء</span><span class="lbl" data-lang="en">Action</span>
+              <span data-lang="ar">احسم الحالات الحدية مبكرا، مثل: هل "الشاحنة الصغيرة" سيارة أم شاحنة؟</span>
+              <span data-lang="en">Settle borderline classes early, e.g. is a "pickup truck" a car or a truck?</span></div>
+            <div class="stage-box"><span class="lbl" data-lang="ar">نقطة الفحص</span><span class="lbl" data-lang="en">Checkpoint</span>
+              <span data-lang="ar">قائمة فئات معتمدة مع تعريف من سطر واحد لكل فئة.</span>
+              <span data-lang="en">An approved class list with a one-line definition per class.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-num">2</div>
+        <div class="stage-body">
+          <div class="stage-title" data-lang="ar">كتابة دليل الوسم</div>
+          <div class="stage-title" data-lang="en">Write the annotation guidelines</div>
+          <div class="stage-goal" data-lang="ar">الاجتهاد الشخصي أكبر تهديد للاتساق؛ والدليل المكتوب هو العلاج.</div>
+          <div class="stage-goal" data-lang="en">Individual judgment is the main threat to consistency; written guidelines are the remedy.</div>
+          <div class="stage-row">
+            <div class="stage-box"><span class="lbl" data-lang="ar">الإجراء</span><span class="lbl" data-lang="en">Action</span>
+              <span data-lang="ar">تعريفات واضحة، وأمثلة صحيحة وخاطئة، وقواعد للحالات الغامضة (الأجسام المحجوبة، الصور غير الواضحة، النص الملتبس).</span>
+              <span data-lang="en">Clear definitions, correct and incorrect examples, and rules for ambiguous cases (occluded objects, blurry images, unclear text).</span></div>
+            <div class="stage-box"><span class="lbl" data-lang="ar">نقطة الفحص</span><span class="lbl" data-lang="en">Checkpoint</span>
+              <span data-lang="ar">جولة تجريبية صغيرة يتفق فيها موسمان مستقلان على النتائج بدرجة مقبولة.</span>
+              <span data-lang="en">A small pilot round in which two independent annotators reach acceptable agreement.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-num">3</div>
+        <div class="stage-body">
+          <div class="stage-title" data-lang="ar">اختيار أدوات الوسم</div>
+          <div class="stage-title" data-lang="en">Select the tooling</div>
+          <div class="stage-goal" data-lang="ar">اختر أداة تدعم نوع بياناتك وتصدر الوسوم بصيغ معيارية.</div>
+          <div class="stage-goal" data-lang="en">Pick a tool that supports your data type and exports labels in standard formats.</div>
+          <div class="stage-row">
+            <div class="stage-box"><span class="lbl" data-lang="ar">الإجراء</span><span class="lbl" data-lang="en">Action</span>
+              <span data-lang="ar">قارن بين الأدوات مفتوحة المصدر والتجارية (الجدول أدناه)، وتحقق من صيغ التصدير مثل JSON وCSV وCOCO وPASCAL VOC.</span>
+              <span data-lang="en">Compare open-source and commercial tools (table below) and confirm export formats such as JSON, CSV, COCO and PASCAL VOC.</span></div>
+            <div class="stage-box"><span class="lbl" data-lang="ar">نقطة الفحص</span><span class="lbl" data-lang="en">Checkpoint</span>
+              <span data-lang="ar">تصدير تجريبي يقرؤه فريق التدريب دون تعديل يدوي.</span>
+              <span data-lang="en">A trial export the training team can load without manual fixes.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-num">4</div>
+        <div class="stage-body">
+          <div class="stage-title" data-lang="ar">تنفيذ الوسم بالفريق المناسب</div>
+          <div class="stage-title" data-lang="en">Execute with the right workforce</div>
+          <div class="stage-goal" data-lang="ar">طابق صعوبة البيانات مع مستوى الفريق (انظر القسم 4).</div>
+          <div class="stage-goal" data-lang="en">Match data difficulty to workforce tier (see Section 4).</div>
+          <div class="stage-row">
+            <div class="stage-box"><span class="lbl" data-lang="ar">الإجراء</span><span class="lbl" data-lang="en">Action</span>
+              <span data-lang="ar">التعهيد الجماعي للمهام البسيطة، وفرق متخصصة للمهام الكبيرة المتكررة، وخبراء المجال للبيانات التي تتطلب ترخيصا مهنيا.</span>
+              <span data-lang="en">Crowdsourcing for simple tasks, dedicated vendor teams for large repetitive work, and domain experts for data that needs professional credentials.</span></div>
+            <div class="stage-box"><span class="lbl" data-lang="ar">نقطة الفحص</span><span class="lbl" data-lang="en">Checkpoint</span>
+              <span data-lang="ar">اجتياز الموسمين لاختبار التأهيل قبل بدء الإنتاج.</span>
+              <span data-lang="en">Annotators pass a qualification test before production starts.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-num">5</div>
+        <div class="stage-body">
+          <div class="stage-title" data-lang="ar">ضمان الجودة</div>
+          <div class="stage-title" data-lang="en">Quality assurance</div>
+          <div class="stage-goal" data-lang="ar">ما لا يقاس لا يدار: قس الاتفاق والدقة باستمرار (القسم 6).</div>
+          <div class="stage-goal" data-lang="en">What is not measured cannot be managed: track agreement and accuracy continuously (Section 6).</div>
+          <div class="stage-row">
+            <div class="stage-box"><span class="lbl" data-lang="ar">الإجراء</span><span class="lbl" data-lang="en">Action</span>
+              <span data-lang="ar">الوسم المتداخل، والعينات الذهبية، ومراجعة حالات الخلاف من قبل محكم أعلى خبرة.</span>
+              <span data-lang="en">Overlapping labels, gold-standard samples, and senior arbitration of disagreements.</span></div>
+            <div class="stage-box"><span class="lbl" data-lang="ar">نقطة الفحص</span><span class="lbl" data-lang="en">Checkpoint</span>
+              <span data-lang="ar">مؤشرات الاتفاق ضمن الحدود التي حددها المشروع مسبقا.</span>
+              <span data-lang="en">Agreement metrics within the thresholds the project set in advance.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-num">6</div>
+        <div class="stage-body">
+          <div class="stage-title" data-lang="ar">التسليم والتدريب والتحسين المستمر</div>
+          <div class="stage-title" data-lang="en">Hand-off, training &amp; iteration</div>
+          <div class="stage-goal" data-lang="ar">الوسم دورة لا خط مستقيم: أخطاء النموذج تكشف ضعف البيانات.</div>
+          <div class="stage-goal" data-lang="en">Annotation is a loop, not a line: model errors reveal weaknesses in the data.</div>
+          <div class="stage-row">
+            <div class="stage-box"><span class="lbl" data-lang="ar">الإجراء</span><span class="lbl" data-lang="en">Action</span>
+              <span data-lang="ar">وثق مجموعة البيانات (المصدر، والمخطط، وإصدار الدليل، والقيود) وفق نهج "صحائف البيانات" <a href="#refs">[8]</a>.</span>
+              <span data-lang="en">Document the dataset (source, schema, guideline version, limitations) following the "Datasheets for Datasets" approach <a href="#refs">[8]</a>.</span></div>
+            <div class="stage-box"><span class="lbl" data-lang="ar">نقطة الفحص</span><span class="lbl" data-lang="en">Checkpoint</span>
+              <span data-lang="ar">تحليل أخطاء النموذج وإعادة الحالات الضعيفة إلى دورة وسم جديدة.</span>
+              <span data-lang="en">Model error analysis, with weak cases routed back into a new labeling round.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="sub-h" data-lang="ar">أدوات شائعة</h3>
+    <h3 class="sub-h" data-lang="en">Common tools</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th><span data-lang="ar">الفئة</span><span data-lang="en">Category</span></th>
+          <th><span data-lang="ar">أمثلة</span><span data-lang="en">Examples</span></th>
+          <th><span data-lang="ar">الأنسب لـ</span><span data-lang="en">Best suited to</span></th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><span data-lang="ar">مفتوحة المصدر</span><span data-lang="en">Open source</span></td>
+            <td><a href="https://labelstud.io/" target="_blank" rel="noopener">Label Studio</a>، <a href="https://github.com/cvat-ai/cvat" target="_blank" rel="noopener">CVAT</a>، <a href="https://github.com/doccano/doccano" target="_blank" rel="noopener">Doccano</a></td>
+            <td><span data-lang="ar">الفرق البحثية الصغيرة، والاستضافة الداخلية للبيانات الحساسة، والميزانيات المحدودة.</span><span data-lang="en">Small research teams, self-hosting for sensitive data, limited budgets.</span></td>
+          </tr>
+          <tr>
+            <td><span data-lang="ar">تجارية</span><span data-lang="en">Commercial</span></td>
+            <td><a href="https://labelbox.com/" target="_blank" rel="noopener">Labelbox</a>، <a href="https://scale.com/" target="_blank" rel="noopener">Scale AI</a>، <a href="https://www.v7labs.com/" target="_blank" rel="noopener">V7</a></td>
+            <td><span data-lang="ar">المشاريع الكبيرة، والوسم الآلي المساعد، ومتطلبات الأمن المؤسسي.</span><span data-lang="en">Large-scale projects, automated pre-labeling, enterprise security needs.</span></td>
+          </tr>
+          <tr>
+            <td><span data-lang="ar">منصات التعهيد الجماعي</span><span data-lang="en">Crowdsourcing platforms</span></td>
+            <td><a href="https://www.mturk.com/" target="_blank" rel="noopener">Amazon Mechanical Turk</a>، <a href="https://toloka.ai/" target="_blank" rel="noopener">Toloka</a></td>
+            <td><span data-lang="ar">المهام البسيطة عالية الحجم التي لا تتطلب خبرة متخصصة.</span><span data-lang="en">Simple, high-volume tasks that need no specialist knowledge.</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note"><div class="n-icon">⚠️</div>
+      <div data-lang="ar">ذكر الأدوات للتوضيح لا للتوصية. وعند التعامل مع بيانات شخصية أو صحية، تحقق من موقع استضافة البيانات وتوافقه مع نظام حماية البيانات الشخصية في المملكة قبل استخدام أي منصة خارجية.</div>
+      <div data-lang="en">Tools are listed for illustration, not endorsement. For personal or health data, check where the platform hosts data and whether that complies with Saudi Arabia's Personal Data Protection Law before using any external service.</div>
+    </div>
+  </section>
+
+  <!-- ══════════ 4. WORKFORCE ══════════ -->
+  <section class="section-card" id="workforce">
+    <div class="section-header">
+      <div class="section-icon">👥</div>
+      <div>
+        <div class="section-title" data-lang="ar">4. الوسم العام مقابل وسم الخبراء</div>
+        <div class="section-title" data-lang="en">4. General vs. Expert Domain Labeling</div>
+        <div class="section-sub" data-lang="ar">اختيار مستوى الفريق الخاطئ يعني ميزانية مهدرة أو نموذجا معيبا</div>
+        <div class="section-sub" data-lang="en">The wrong tier means either wasted budget or a flawed model</div>
+      </div>
+    </div>
+
+    <div class="key-point" style="margin-top:0;margin-bottom:6px;">
+      <div class="kp-icon">⏱️</div>
+      <div data-lang="ar"><strong>قاعدة عملية:</strong> إذا استطاع شخص عادي أن يحدد الوسم الصحيح خلال ثوان دون الرجوع إلى مرجع متخصص، فالمهمة وسم عام. وإذا تطلب الحكم تدريبا أو ترخيصا مهنيا، فهي وسم خبراء.</div>
+      <div data-lang="en"><strong>Rule of thumb:</strong> if an average person can choose the correct label within seconds without a specialist reference, it is general labeling. If the judgment needs professional training or a license, it is expert labeling.</div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th><span data-lang="ar">المعيار</span><span data-lang="en">Criterion</span></th>
+          <th><span data-lang="ar">الوسم العام</span><span data-lang="en">General labeling</span></th>
+          <th><span data-lang="ar">وسم خبراء المجال</span><span data-lang="en">Expert domain labeling</span></th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><span data-lang="ar">الفريق</span><span data-lang="en">Workforce</span></td>
+            <td><span data-lang="ar">التعهيد الجماعي، وفرق الشركات المتخصصة، والفرق الداخلية غير الفنية.</span><span data-lang="en">Crowd workers, vendor teams, non-technical internal staff.</span></td>
+            <td><span data-lang="ar">أطباء أشعة، ومحامون، ومحللون ماليون، ومطورو برمجيات، ولغويون.</span><span data-lang="en">Radiologists, lawyers, financial analysts, software developers, linguists.</span></td>
+          </tr>
+          <tr>
+            <td><span data-lang="ar">أمثلة البيانات</span><span data-lang="en">Example data</span></td>
+            <td><span data-lang="ar">صور الحياة اليومية، والمنتجات، والمحادثات، والمقاطع الصوتية الواضحة، والإشراف على المحتوى الظاهر.</span><span data-lang="en">Everyday images, retail products, conversations, clear audio, obvious content moderation.</span></td>
+            <td><span data-lang="ar">الصور الطبية، والعقود، والقوائم المالية، والشيفرات المتقدمة، والبيانات الجيولوجية.</span><span data-lang="en">Medical scans, contracts, financial statements, advanced code, seismic data.</span></td>
+          </tr>
+          <tr>
+            <td><span data-lang="ar">التدريب المطلوب</span><span data-lang="en">Training needed</span></td>
+            <td><span data-lang="ar">قليل، ويعتمد على الحدس البشري العام.</span><span data-lang="en">Minimal; relies on general human intuition.</span></td>
+            <td><span data-lang="ar">سنوات من التأهيل المهني.</span><span data-lang="en">Years of professional training.</span></td>
+          </tr>
+          <tr>
+            <td><span data-lang="ar">التكلفة والتوسع</span><span data-lang="en">Cost &amp; scale</span></td>
+            <td><span data-lang="ar">تكلفة منخفضة للوسم الواحد، وقابلية توسع عالية.</span><span data-lang="en">Low cost per label, highly scalable.</span></td>
+            <td><span data-lang="ar">تكلفة مرتفعة، والتوسع محدود بتوفر الخبراء.</span><span data-lang="en">High cost; scale limited by expert availability.</span></td>
+          </tr>
+          <tr>
+            <td><span data-lang="ar">ضبط الجودة</span><span data-lang="en">Quality control</span></td>
+            <td><span data-lang="ar">التصويت بالأغلبية بين 3 إلى 5 موسمين، والعينات الذهبية المدسوسة.</span><span data-lang="en">Majority vote across 3 to 5 annotators; hidden gold-standard samples.</span></td>
+            <td><span data-lang="ar">مراجعة ثنائية (منفذ ومدقق)، وتدقيق دوري لمعامل الاتفاق.</span><span data-lang="en">Two-pass maker-checker review; periodic agreement audits.</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card-grid" style="margin-top:18px;">
+      <div class="card">
+        <div class="card-title">🌐 <span data-lang="ar">رفع جودة الوسم العام</span><span data-lang="en">Raising general-labeling quality</span></div>
+        <ul>
+          <li data-lang="ar"><b>العينات الذهبية:</b> أدرج عينات معروفة الإجابة؛ ومن يخفق فيها يوقف عمله للمراجعة.</li>
+          <li data-lang="en"><b>Gold samples:</b> insert items with known answers; pause annotators who fail them for review.</li>
+          <li data-lang="ar"><b>الإجماع:</b> وزع كل عينة على عدة موسمين مستقلين، واعتمد رأي الأغلبية.</li>
+          <li data-lang="en"><b>Consensus:</b> send each item to several independent annotators and take the majority.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">🩺 <span data-lang="ar">رفع جودة وسم الخبراء</span><span data-lang="en">Raising expert-labeling quality</span></div>
+        <ul>
+          <li data-lang="ar"><b>منفذ ومدقق:</b> يوسم خبير، ويراجع خبير أقدم ويعتمد.</li>
+          <li data-lang="en"><b>Maker-checker:</b> one expert labels; a senior expert reviews and signs off.</li>
+          <li data-lang="ar"><b>تدقيق الاتفاق:</b> احسب معامل الاتفاق على عينة دورية، وأعد مواءمة الخبراء إذا انخفض عن الحد المعتمد في المشروع.</li>
+          <li data-lang="en"><b>Agreement audits:</b> compute agreement on a periodic sample and re-align experts if it drops below the project's threshold.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 5. ONBOARDING ══════════ -->
+  <section class="section-card" id="onboarding">
+    <div class="section-header">
+      <div class="section-icon">🪪</div>
+      <div>
+        <div class="section-title" data-lang="ar">5. تأهيل الخبراء والتحقق من مهاراتهم</div>
+        <div class="section-title" data-lang="en">5. Onboarding &amp; Verifying Expert Annotators</div>
+        <div class="section-sub" data-lang="ar">السيرة الذاتية وحدها لا تضمن جودة الوسم؛ فالخبراء يختلفون في الحالات الحدية</div>
+        <div class="section-sub" data-lang="en">A CV alone does not guarantee label quality; experts differ on edge cases</div>
+      </div>
+    </div>
+    <div class="funnel">
+      <div class="funnel-step">
+        <div class="fs-n" data-lang="ar">المرحلة 1</div><div class="fs-n" data-lang="en">Stage 1</div>
+        <div class="fs-t" data-lang="ar">التحقق من المؤهلات</div><div class="fs-t" data-lang="en">Credential check</div>
+        <p data-lang="ar">مطابقة الترخيص مع الجهة المختصة، مثل الهيئة السعودية للتخصصات الصحية للممارسين الصحيين، والتحقق من الهوية لمنع مشاركة الحسابات.</p>
+        <p data-lang="en">Verify licenses with the relevant body, e.g. the Saudi Commission for Health Specialties for clinicians, and verify identity to prevent account sharing.</p>
+      </div>
+      <div class="funnel-step">
+        <div class="fs-n" data-lang="ar">المرحلة 2</div><div class="fs-n" data-lang="en">Stage 2</div>
+        <div class="fs-t" data-lang="ar">اختبار مهارة أساسي</div><div class="fs-t" data-lang="en">Baseline skill test</div>
+        <p data-lang="ar">مجموعة اختبار موسومة مسبقا (نحو 20 إلى 30 عينة) تجمع حالات معتادة وحالات حدية، بحد نجاح يحدده المشروع.</p>
+        <p data-lang="en">A pre-labeled test set (about 20 to 30 items) mixing routine and edge cases, with a pass mark set by the project.</p>
+      </div>
+      <div class="funnel-step">
+        <div class="fs-n" data-lang="ar">المرحلة 3</div><div class="fs-n" data-lang="en">Stage 3</div>
+        <div class="fs-t" data-lang="ar">مرحلة المعايرة</div><div class="fs-t" data-lang="en">Calibration</div>
+        <p data-lang="ar">يراجع مدقق أقدم كل الأعمال الأولى للخبير الجديد، مع تغذية راجعة مباشرة لتصحيح الأخطاء المنهجية مبكرا.</p>
+        <p data-lang="en">A senior reviewer audits all of a new expert's first tasks, with direct feedback to correct systematic errors early.</p>
+      </div>
+      <div class="funnel-step">
+        <div class="fs-n" data-lang="ar">المرحلة 4</div><div class="fs-n" data-lang="en">Stage 4</div>
+        <div class="fs-t" data-lang="ar">الانتقال للإنتاج</div><div class="fs-t" data-lang="en">Production</div>
+        <p data-lang="ar">عمل مستقل مع تدقيق عشوائي مستمر بدلا من المراجعة الكاملة.</p>
+        <p data-lang="en">Independent work with ongoing random audits instead of full review.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 6. QA ══════════ -->
+  <section class="section-card" id="qa">
+    <div class="section-header">
+      <div class="section-icon">📏</div>
+      <div>
+        <div class="section-title" data-lang="ar">6. ضمان الجودة ومقاييسها</div>
+        <div class="section-title" data-lang="en">6. Quality Assurance &amp; Metrics</div>
+      </div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">🤝 <span data-lang="ar">الوسم المتداخل (الإجماع)</span><span data-lang="en">Overlap (consensus) labeling</span></div>
+        <p data-lang="ar">تعرض العينة نفسها على عدة موسمين مستقلين. عند الاتفاق تعتمد في المجموعة المرجعية، وعند الخلاف تحال إلى محكم أعلى خبرة.</p>
+        <p data-lang="en">The same item goes to several independent annotators. If they agree it enters the reference set; if not, it is routed to a senior arbiter.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">📊 <span data-lang="ar">معامل الاتفاق بين الموسمين (IAA)</span><span data-lang="en">Inter-annotator agreement (IAA)</span></div>
+        <p data-lang="ar">يقيس الاتفاق بعد استبعاد أثر الصدفة: معامل كوهين كابا لموسمين <a href="#refs">[9]</a>، ومعامل فلايس كابا لأكثر من موسمين <a href="#refs">[10]</a>. ووفق تصنيف شائع، تعد القيم بين 0.61 و0.80 اتفاقا جيدا، وما فوق 0.80 اتفاقا شبه تام <a href="#refs">[11]</a>.</p>
+        <p data-lang="en">Measures agreement after removing chance: Cohen's kappa for two annotators <a href="#refs">[9]</a> and Fleiss' kappa for more than two <a href="#refs">[10]</a>. On a widely used scale, 0.61 to 0.80 is substantial agreement and above 0.80 almost perfect <a href="#refs">[11]</a>.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">🔲 <span data-lang="ar">التقاطع على الاتحاد (IoU)</span><span data-lang="en">Intersection over Union (IoU)</span></div>
+        <p data-lang="ar">يقيس دقة التحديد المكاني في الرؤية الحاسوبية بمقارنة صندوق الموسم بالصندوق المرجعي.</p>
+        <p data-lang="en">Measures spatial precision in computer vision by comparing an annotator's box with the reference box.</p>
+        <div class="formula">IoU = <span class="frac"><span>Area of Overlap</span><span>Area of Union</span></span></div>
+      </div>
+    </div>
+    <div class="note"><div class="n-icon">⚠️</div>
+      <div data-lang="ar">الحدود الرقمية (مثل 0.80 لمعامل كابا) أعراف إرشادية لا معايير ملزمة. حدد العتبات في بداية المشروع بحسب طبيعة المهمة وخطورة الخطأ، ووثقها في دليل الوسم.</div>
+      <div data-lang="en">Numeric thresholds (such as 0.80 for kappa) are conventions, not binding standards. Set thresholds at project start according to the task and the cost of errors, and record them in the guidelines.</div>
+    </div>
+  </section>
+
+  <!-- ══════════ 7. SECURITY ══════════ -->
+  <section class="section-card" id="security">
+    <div class="section-header">
+      <div class="section-icon">🔐</div>
+      <div>
+        <div class="section-title" data-lang="ar">7. خصوصية البيانات وأمنها</div>
+        <div class="section-title" data-lang="en">7. Data Privacy &amp; Security</div>
+        <div class="section-sub" data-lang="ar">احم البيانات أثناء التخزين والنقل والاستخدام</div>
+        <div class="section-sub" data-lang="en">Protect data at rest, in transit and in use</div>
+      </div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">🕶️ <span data-lang="ar">تقليل البيانات وإزالة التعريف</span><span data-lang="en">Minimization &amp; de-identification</span></div>
+        <ul>
+          <li data-lang="ar"><b>النصوص:</b> إخفاء الأسماء وأرقام الهوية والعناوين آليا قبل عرضها على الموسمين، باستخدام أدوات مثل Presidio <a href="#refs">[16]</a>.</li>
+          <li data-lang="en"><b>Text:</b> automatically mask names, ID numbers and addresses before annotators see them, with tools such as Presidio <a href="#refs">[16]</a>.</li>
+          <li data-lang="ar"><b>الصور الطبية:</b> إزالة بيانات DICOM الوصفية التي قد تحمل اسم المريض والمنشأة <a href="#refs">[15]</a>.</li>
+          <li data-lang="en"><b>Medical images:</b> strip DICOM metadata that can carry patient and facility names <a href="#refs">[15]</a>.</li>
+          <li data-lang="ar"><b>الصور العامة:</b> طمس الوجوه ولوحات المركبات والتفاصيل المعرفة.</li>
+          <li data-lang="en"><b>General imagery:</b> blur faces, licence plates and identifying details.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">🛡️ <span data-lang="ar">الضوابط التقنية</span><span data-lang="en">Technical controls</span></div>
+        <ul>
+          <li data-lang="ar"><b>لا تخزين محلي:</b> عرض البيانات عبر روابط مؤقتة موقعة من التخزين السحابي داخل المتصفح فقط <a href="#refs">[18]</a>.</li>
+          <li data-lang="en"><b>No local storage:</b> stream data through short-lived pre-signed cloud links, rendered only in the browser <a href="#refs">[18]</a>.</li>
+          <li data-lang="ar"><b>تعطيل التنزيل والتصدير:</b> صلاحية العرض والوسم فقط.</li>
+          <li data-lang="en"><b>Disable download &amp; export:</b> view-and-label permissions only.</li>
+          <li data-lang="ar"><b>سطح مكتب افتراضي:</b> للبيانات عالية السرية، مع منع النسخ والطباعة ونقل الملفات <a href="#refs">[19]</a>.</li>
+          <li data-lang="en"><b>Virtual desktops (VDI):</b> for highly confidential data, with copy, print and file transfer blocked <a href="#refs">[19]</a>.</li>
+          <li data-lang="ar"><b>العلامات المائية:</b> علامة باسم المستخدم على مساحة العمل للردع وتتبع أي تسريب.</li>
+          <li data-lang="en"><b>Watermarking:</b> a username overlay on the workspace to deter and trace leaks.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">⚖️ <span data-lang="ar">الإطار التنظيمي</span><span data-lang="en">Regulatory frame</span></div>
+        <ul>
+          <li data-lang="ar"><b>في المملكة:</b> نظام حماية البيانات الشخصية الصادر عن سدايا هو المرجع الأساسي لأي بيانات شخصية <a href="#refs">[12]</a>.</li>
+          <li data-lang="en"><b>In Saudi Arabia:</b> the Personal Data Protection Law issued through SDAIA is the primary reference for personal data <a href="#refs">[12]</a>.</li>
+          <li data-lang="ar"><b>مراجع دولية:</b> إرشادات NIST لإزالة التعريف <a href="#refs">[13]</a>، وإرشادات HHS للبيانات الصحية <a href="#refs">[14]</a>.</li>
+          <li data-lang="en"><b>International references:</b> NIST de-identification guidance <a href="#refs">[13]</a> and HHS guidance for health data <a href="#refs">[14]</a>.</li>
+          <li data-lang="ar"><b>في الجامعة:</b> موافقة لجنة أخلاقيات البحث قبل وسم بيانات بشرية.</li>
+          <li data-lang="en"><b>At the university:</b> research-ethics committee approval before labeling human-subject data.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 8. SCALE ══════════ -->
+  <section class="section-card" id="scale">
+    <div class="section-header">
+      <div class="section-icon">⚡</div>
+      <div>
+        <div class="section-title" data-lang="ar">8. التوسع بالوسم الذكي</div>
+        <div class="section-title" data-lang="en">8. Scaling with Smart Labeling</div>
+        <div class="section-sub" data-lang="ar">استخدام الذكاء الاصطناعي لتقليل الجهد اليدوي دون التنازل عن الجودة</div>
+        <div class="section-sub" data-lang="en">Using AI to reduce manual effort without giving up quality</div>
+      </div>
+    </div>
+
+    <h3 class="sub-h" style="margin-top:0;" data-lang="ar">التعلم النشط (Active Learning)</h3>
+    <h3 class="sub-h" style="margin-top:0;" data-lang="en">Active learning</h3>
+    <p class="prose" data-lang="ar">بدلا من وسم كل البيانات، يختار النموذج العينات التي يكون فيها أقل ثقة، فيتركز الجهد البشري حيث يفيد أكثر <a href="#refs">[6]</a>.</p>
+    <p class="prose" data-lang="en">Instead of labeling everything, the model selects the items it is least confident about, so human effort goes where it helps most <a href="#refs">[6]</a>.</p>
+    <div class="loop">
+      <div class="loop-step"><b>1</b><span data-lang="ar">وسم عينة صغيرة متنوعة</span><span data-lang="en">Label a small, diverse sample</span></div>
+      <div class="loop-step"><b>2</b><span data-lang="ar">تدريب نموذج أولي خفيف</span><span data-lang="en">Train a light preliminary model</span></div>
+      <div class="loop-step"><b>3</b><span data-lang="ar">تشغيله على البيانات غير الموسومة</span><span data-lang="en">Run it on unlabeled data</span></div>
+      <div class="loop-step"><b>4</b><span data-lang="ar">اختيار العينات الأقل ثقة</span><span data-lang="en">Pick the least-confident items</span></div>
+      <div class="loop-step"><b>5</b><span data-lang="ar">وسمها بشريا ثم تكرار الدورة</span><span data-lang="en">Label them by hand, then repeat</span></div>
+    </div>
+
+    <h3 class="sub-h" data-lang="ar">الوسم بمساعدة النموذج (Model-Assisted Labeling)</h3>
+    <h3 class="sub-h" data-lang="en">Model-assisted labeling</h3>
+    <p class="prose" data-lang="ar">تنتج نماذج أساسية، مثل Segment Anything للصور <a href="#refs">[5]</a> أو النماذج اللغوية الكبيرة للنصوص، وسوما أولية، ويتحول دور الموسم من الإنشاء إلى المراجعة والتصحيح، وهو ما يسرع العمل عادة بدرجة ملحوظة.</p>
+    <p class="prose" data-lang="en">Foundation models, such as Segment Anything for images <a href="#refs">[5]</a> or large language models for text, produce draft labels, and the annotator's role shifts from creating to reviewing and correcting, which usually speeds work up noticeably.</p>
+    <div class="note"><div class="n-icon">⚠️</div>
+      <div data-lang="ar">احذر "الانحياز للأتمتة": يميل الموسمون إلى قبول اقتراح النموذج حتى عند خطئه. قس جودة الوسوم المعدلة مقابل عينة موسومة يدويا بالكامل قبل اعتماد هذا الأسلوب على نطاق واسع.</div>
+      <div data-lang="en">Watch for automation bias: annotators tend to accept a model's suggestion even when it is wrong. Compare edited labels against a fully hand-labeled sample before adopting this approach at scale.</div>
+    </div>
+  </section>
+
+  <!-- ══════════ 9. CHECKLIST ══════════ -->
+  <section class="section-card" id="checklist">
+    <div class="section-header">
+      <div class="section-icon">✅</div>
+      <div>
+        <div class="section-title" data-lang="ar">9. قائمة التحقق قبل الانطلاق</div>
+        <div class="section-title" data-lang="en">9. Pre-Launch Checklist</div>
+      </div>
+    </div>
+    <ul class="checklist">
+      <li><input type="checkbox" aria-label="1"><span data-lang="ar">مخطط فئات معتمد بتعريفات واضحة</span><span data-lang="en">Approved class schema with clear definitions</span></li>
+      <li><input type="checkbox" aria-label="2"><span data-lang="ar">دليل وسم بأمثلة وقواعد للحالات الحدية</span><span data-lang="en">Guidelines with examples and edge-case rules</span></li>
+      <li><input type="checkbox" aria-label="3"><span data-lang="ar">جولة تجريبية بمعامل اتفاق مقبول</span><span data-lang="en">Pilot round with acceptable agreement</span></li>
+      <li><input type="checkbox" aria-label="4"><span data-lang="ar">أداة مختارة وصيغة تصدير مجربة</span><span data-lang="en">Tool chosen and export format tested</span></li>
+      <li><input type="checkbox" aria-label="5"><span data-lang="ar">مستوى الفريق مناسب لصعوبة البيانات</span><span data-lang="en">Workforce tier matched to data difficulty</span></li>
+      <li><input type="checkbox" aria-label="6"><span data-lang="ar">اختبار تأهيل ومرحلة معايرة للموسمين</span><span data-lang="en">Qualification test and calibration for annotators</span></li>
+      <li><input type="checkbox" aria-label="7"><span data-lang="ar">عتبات جودة محددة وموثقة مسبقا</span><span data-lang="en">Quality thresholds set and documented in advance</span></li>
+      <li><input type="checkbox" aria-label="8"><span data-lang="ar">إزالة التعريف وضوابط الوصول مفعلة</span><span data-lang="en">De-identification and access controls in place</span></li>
+      <li><input type="checkbox" aria-label="9"><span data-lang="ar">موافقة أخلاقيات البحث عند الحاجة</span><span data-lang="en">Research-ethics approval where required</span></li>
+      <li><input type="checkbox" aria-label="10"><span data-lang="ar">خطة توثيق لمجموعة البيانات وإصداراتها</span><span data-lang="en">Plan to document the dataset and its versions</span></li>
+    </ul>
+  </section>
+
+  <!-- ══════════ 10. LEARN MORE ══════════ -->
+  <section class="section-card" id="learn">
+    <div class="section-header">
+      <div class="section-icon">📚</div>
+      <div>
+        <div class="section-title" data-lang="ar">10. مصادر للتعمق</div>
+        <div class="section-title" data-lang="en">10. Resources to Go Deeper</div>
+        <div class="section-sub" data-lang="ar">مختارات موثوقة لكل محور من محاور الدليل</div>
+        <div class="section-sub" data-lang="en">Trusted picks for each part of this roadmap</div>
+      </div>
+    </div>
+
+    <div class="res-group">
+      <h4 data-lang="ar">🎓 مقررات مجانية</h4><h4 data-lang="en">🎓 Free courses</h4>
+      <ul class="res-list">
+        <li><a href="https://dcai.csail.mit.edu/" target="_blank" rel="noopener">Introduction to Data-Centric AI</a><span class="r-org">MIT CSAIL</span>
+          <span data-lang="ar">مقرر عن تحسين البيانات بدلا من النماذج، يشمل أخطاء الوسم والتعلم النشط.</span><span data-lang="en">Covers improving data rather than models, including label errors and active learning.</span></li>
+        <li><a href="https://developers.google.com/machine-learning/crash-course" target="_blank" rel="noopener">Machine Learning Crash Course</a><span class="r-org">Google for Developers</span>
+          <span data-lang="ar">أساسيات تعلم الآلة، ومنها إعداد البيانات والوسوم.</span><span data-lang="en">ML fundamentals, including data preparation and labels.</span></li>
+      </ul>
+    </div>
+
+    <div class="res-group">
+      <h4 data-lang="ar">📖 كتب مرجعية</h4><h4 data-lang="en">📖 Reference books</h4>
+      <ul class="res-list">
+        <li><a href="https://www.manning.com/books/human-in-the-loop-machine-learning" target="_blank" rel="noopener">Human-in-the-Loop Machine Learning</a><span class="r-org">R. Monarch, Manning</span>
+          <span data-lang="ar">التعلم النشط وإدارة الموسمين وضبط الجودة بالتفصيل.</span><span data-lang="en">Active learning, annotator management and quality control in depth.</span></li>
+        <li><a href="https://www.oreilly.com/library/view/natural-language-annotation/9781449332693/" target="_blank" rel="noopener">Natural Language Annotation for Machine Learning</a><span class="r-org">J. Pustejovsky &amp; A. Stubbs, O'Reilly</span>
+          <span data-lang="ar">منهجية بناء مخططات الوسم وأدلته للنصوص.</span><span data-lang="en">Method for designing annotation schemas and guidelines for text.</span></li>
+      </ul>
+    </div>
+
+    <div class="res-group">
+      <h4 data-lang="ar">🛠️ توثيق الأدوات والصيغ</h4><h4 data-lang="en">🛠️ Tool &amp; format documentation</h4>
+      <ul class="res-list">
+        <li><a href="https://labelstud.io/" target="_blank" rel="noopener">Label Studio</a><span class="r-org">HumanSignal</span>
+          <span data-lang="ar">أداة مفتوحة المصدر متعددة الأنواع، مناسبة للبدء.</span><span data-lang="en">Multi-modal open-source tool, a good starting point.</span></li>
+        <li><a href="https://github.com/cvat-ai/cvat" target="_blank" rel="noopener">CVAT</a><span class="r-org">CVAT.ai</span>
+          <span data-lang="ar">أداة مفتوحة المصدر متخصصة في الصور والفيديو.</span><span data-lang="en">Open-source tool focused on images and video.</span></li>
+        <li><a href="https://cocodataset.org/#format-data" target="_blank" rel="noopener">COCO Data Format</a><span class="r-org">COCO Consortium</span>
+          <span data-lang="ar">الصيغة المعيارية الأكثر شيوعا لوسوم الرؤية الحاسوبية.</span><span data-lang="en">The most common standard format for vision labels.</span></li>
+      </ul>
+    </div>
+
+    <div class="res-group">
+      <h4 data-lang="ar">🔐 الحوكمة والخصوصية</h4><h4 data-lang="en">🔐 Governance &amp; privacy</h4>
+      <ul class="res-list">
+        <li><a href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">AI Risk Management Framework</a><span class="r-org">NIST</span>
+          <span data-lang="ar">إطار لإدارة مخاطر الذكاء الاصطناعي، ومنها مخاطر البيانات.</span><span data-lang="en">A framework for managing AI risks, including data risks.</span></li>
+        <li><a href="https://microsoft.github.io/presidio/" target="_blank" rel="noopener">Presidio</a><span class="r-org">Microsoft</span>
+          <span data-lang="ar">أداة مفتوحة المصدر لاكتشاف البيانات الشخصية وإخفائها.</span><span data-lang="en">Open-source tool to detect and mask personal data.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ══════════ 11. DISCLOSURE ══════════ -->
+  <section class="section-card" id="disclosure">
+    <div class="section-header">
+      <div class="section-icon">📢</div>
+      <div>
+        <div class="section-title" data-lang="ar">11. الإفصاح عن استخدام الذكاء الاصطناعي</div>
+        <div class="section-title" data-lang="en">11. AI Disclosure</div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="disclosure-table">
+        <thead><tr>
+          <th><span data-lang="ar">الأداة</span><span data-lang="en">Tool</span></th>
+          <th><span data-lang="ar">دورها في إعداد الصفحة</span><span data-lang="en">Role in preparing this page</span></th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td>Gemini Pro (Google)</td>
+            <td><span data-lang="ar">جمع المعلومات وإعداد المسودة الأولية لمحتوى أنواع الوسم، ومراحل العمل، والفرق، وضمان الجودة، والأمن.</span><span data-lang="en">Information collection and the initial draft on annotation types, pipeline stages, workforce, quality assurance and security.</span></td>
+          </tr>
+          <tr>
+            <td>Claude (Anthropic)</td>
+            <td><span data-lang="ar">إعادة الهيكلة في صورة خارطة طريق، والصياغة ثنائية اللغة، ومراجعة الادعاءات مقابل المصادر، وتصميم الصفحة وبرمجتها.</span><span data-lang="en">Restructuring as a roadmap, bilingual drafting, checking claims against the sources, and page design and build.</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note"><div class="n-icon">🤖</div>
+      <div data-lang="ar">روجعت الادعاءات الرئيسية مقابل المصادر المذكورة أدناه، وحذفت الأرقام التي تعذر التحقق منها. ويجب مراجعة المحتوى من قبل المؤلف أو خبير المجال قبل اعتماده في التدريس أو البحث.</div>
+      <div data-lang="en">Key claims were checked against the sources listed below, and figures that could not be verified were removed. The content should be reviewed by the author or a subject-matter expert before use in teaching or research.</div>
+    </div>
+  </section>
+
+  <!-- ══════════ 12. REFERENCES ══════════ -->
+  <section class="section-card" id="refs">
+    <div class="section-header">
+      <div class="section-icon">🔗</div>
+      <div>
+        <div class="section-title" data-lang="ar">12. المصادر والمراجع</div>
+        <div class="section-title" data-lang="en">12. Sources &amp; References</div>
+        <div class="section-sub" data-lang="ar">تاريخ الوصول: أكتوبر 2026</div>
+        <div class="section-sub" data-lang="en">Accessed: October 2026</div>
+      </div>
+    </div>
+    <ol class="ref-list">
+      <li><span class="ref-en">Data annotation tools and platforms cited in this guide: Label Studio, CVAT, Doccano, Labelbox, Scale AI, V7, Amazon Mechanical Turk, Toloka.</span> <span class="ref-org">Official product sites</span>, <a href="https://labelstud.io/" target="_blank" rel="noopener">labelstud.io</a></li>
+      <li><span class="ref-en">COCO: Common Objects in Context, Data Format.</span> <span class="ref-org">COCO Consortium</span>, <a href="https://cocodataset.org/#format-data" target="_blank" rel="noopener">https://cocodataset.org/#format-data</a></li>
+      <li><span class="ref-en">Northcutt, C. G., Athalye, A., &amp; Mueller, J. (2021). Pervasive Label Errors in Test Sets Destabilize Machine Learning Benchmarks. NeurIPS Datasets and Benchmarks.</span> <span class="ref-org">MIT / arXiv</span>, <a href="https://arxiv.org/abs/2103.14749" target="_blank" rel="noopener">https://arxiv.org/abs/2103.14749</a></li>
+      <li><span class="ref-en">Sambasivan, N., et al. (2021). "Everyone wants to do the model work, not the data work": Data Cascades in High-Stakes AI. CHI '21.</span> <span class="ref-org">Google Research / ACM</span>, <a href="https://dl.acm.org/doi/10.1145/3411764.3445518" target="_blank" rel="noopener">https://dl.acm.org/doi/10.1145/3411764.3445518</a></li>
+      <li><span class="ref-en">Kirillov, A., et al. (2023). Segment Anything.</span> <span class="ref-org">Meta AI / arXiv</span>, <a href="https://arxiv.org/abs/2304.02643" target="_blank" rel="noopener">https://arxiv.org/abs/2304.02643</a></li>
+      <li><span class="ref-en">Settles, B. (2009). Active Learning Literature Survey. Computer Sciences Technical Report 1648.</span> <span class="ref-org">University of Wisconsin–Madison</span>, <a href="https://minds.wisconsin.edu/handle/1793/60660" target="_blank" rel="noopener">https://minds.wisconsin.edu/handle/1793/60660</a></li>
+      <li><span class="ref-en">Ouyang, L., et al. (2022). Training language models to follow instructions with human feedback.</span> <span class="ref-org">OpenAI / arXiv</span>, <a href="https://arxiv.org/abs/2203.02155" target="_blank" rel="noopener">https://arxiv.org/abs/2203.02155</a></li>
+      <li><span class="ref-en">Gebru, T., et al. (2021). Datasheets for Datasets. Communications of the ACM.</span> <span class="ref-org">arXiv</span>, <a href="https://arxiv.org/abs/1803.09010" target="_blank" rel="noopener">https://arxiv.org/abs/1803.09010</a></li>
+      <li><span class="ref-en">Cohen, J. (1960). A coefficient of agreement for nominal scales. Educational and Psychological Measurement, 20(1), 37–46.</span> <span class="ref-org">SAGE</span>, <a href="https://doi.org/10.1177/001316446002000104" target="_blank" rel="noopener">https://doi.org/10.1177/001316446002000104</a></li>
+      <li><span class="ref-en">Fleiss, J. L. (1971). Measuring nominal scale agreement among many raters. Psychological Bulletin, 76(5), 378–382.</span> <span class="ref-org">APA</span>, <a href="https://doi.org/10.1037/h0031619" target="_blank" rel="noopener">https://doi.org/10.1037/h0031619</a></li>
+      <li><span class="ref-en">Landis, J. R., &amp; Koch, G. G. (1977). The measurement of observer agreement for categorical data. Biometrics, 33(1), 159–174.</span> <span class="ref-org">JSTOR</span>, <a href="https://doi.org/10.2307/2529310" target="_blank" rel="noopener">https://doi.org/10.2307/2529310</a></li>
+      <li><span class="ref-en">Personal Data Protection Law (PDPL).</span> <span class="ref-org">Saudi Data &amp; AI Authority (SDAIA)</span>, <a href="https://sdaia.gov.sa/en/" target="_blank" rel="noopener">https://sdaia.gov.sa/en/</a></li>
+      <li><span class="ref-en">Garfinkel, S., et al. NIST SP 800-188: De-Identifying Government Datasets.</span> <span class="ref-org">NIST</span>, <a href="https://csrc.nist.gov/pubs/sp/800/188/final" target="_blank" rel="noopener">https://csrc.nist.gov/pubs/sp/800/188/final</a></li>
+      <li><span class="ref-en">Guidance Regarding Methods for De-identification of Protected Health Information.</span> <span class="ref-org">U.S. Department of Health &amp; Human Services (HHS)</span>, <a href="https://www.hhs.gov/hipaa/for-professionals/privacy/special-topics/de-identification/index.html" target="_blank" rel="noopener">https://www.hhs.gov/hipaa/for-professionals/privacy/special-topics/de-identification/index.html</a></li>
+      <li><span class="ref-en">DICOM PS3.15, Annex E: Attribute Confidentiality Profiles.</span> <span class="ref-org">NEMA / DICOM Standards Committee</span>, <a href="https://dicom.nema.org/medical/dicom/current/output/chtml/part15/chapter_E.html" target="_blank" rel="noopener">https://dicom.nema.org/medical/dicom/current/output/chtml/part15/chapter_E.html</a></li>
+      <li><span class="ref-en">Presidio: Data Protection and De-identification SDK.</span> <span class="ref-org">Microsoft</span>, <a href="https://microsoft.github.io/presidio/" target="_blank" rel="noopener">https://microsoft.github.io/presidio/</a></li>
+      <li><span class="ref-en">AI Risk Management Framework (AI RMF 1.0).</span> <span class="ref-org">NIST</span>, <a href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">https://www.nist.gov/itl/ai-risk-management-framework</a></li>
+      <li><span class="ref-en">Sharing objects with presigned URLs, Amazon S3 User Guide.</span> <span class="ref-org">Amazon Web Services</span>, <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html</a></li>
+      <li><span class="ref-en">What is Amazon WorkSpaces? Administration Guide.</span> <span class="ref-org">Amazon Web Services</span>, <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/amazon-workspaces.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/workspaces/latest/adminguide/amazon-workspaces.html</a></li>
+      <li><span class="ref-en">Saudi Commission for Health Specialties (professional registration and classification).</span> <span class="ref-org">SCFHS</span>, <a href="https://www.scfhs.org.sa/en" target="_blank" rel="noopener">https://www.scfhs.org.sa/en</a></li>
+    </ol>
+  </section>
+
+</div><!-- end page-wrap -->
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer class="footer">
+  <div data-lang="ar">
+    <strong>مركز التميز البحثي في الذكاء الاصطناعي وعلم البيانات، جامعة الملك عبدالعزيز</strong>
+    <div class="footer-divider"></div>
+    تم إعداد هذه الصفحة باستخدام الذكاء الاصطناعي التوليدي عبر Claude وGemini Pro
+    <br><span class="footer-year year"></span>
+  </div>
+  <div data-lang="en">
+    <strong>Center for Research Excellence in Artificial Intelligence &amp; Data Science (AIADS), King Abdulaziz University</strong>
+    <div class="footer-divider"></div>
+    This page was prepared using Generative AI via Claude and Gemini Pro
+    <br><span class="footer-year year"></span>
+  </div>
+</footer>
+
+</div><!-- end content-to-export -->
+
+<script>
+  // Current year
+  document.querySelectorAll('.year').forEach(function (el) { el.textContent = new Date().getFullYear(); });
+
+  var TITLES = {
+    ar: 'خارطة طريق وسم البيانات وتوصيفها | تدريب نماذج الذكاء الاصطناعي',
+    en: 'Data Annotation & Labeling Roadmap | Training Data for AI'
+  };
+  var isArabic = true;
+
+  function applyLang() {
+    document.body.classList.toggle('ltr', !isArabic);
+    document.documentElement.lang = isArabic ? 'ar' : 'en';
+    document.documentElement.dir = isArabic ? 'rtl' : 'ltr';
+    document.getElementById('langBtn').textContent = isArabic ? '🌐 English' : '🌐 عربي';
+    document.title = isArabic ? TITLES.ar : TITLES.en;
+    try { localStorage.setItem('aiads-annotation-lang', isArabic ? 'ar' : 'en'); } catch (e) {}
+  }
+  function toggleLang() { isArabic = !isArabic; applyLang(); }
+
+  try { if (localStorage.getItem('aiads-annotation-lang') === 'en') { isArabic = false; } } catch (e) {}
+  applyLang();
+
+  // PDF download, filename generated from the current page title
+  function downloadPDF() {
+    var base = (isArabic ? TITLES.ar : TITLES.en).split('|')[0].trim();
+    var filename = base.replace(/[&]/g, 'and').replace(/[\\/:*?"<>|]+/g, '').replace(/\s+/g, '-') + '.pdf';
+
+    if (typeof html2pdf === 'undefined') { window.print(); return; }
+
+    var btn = document.getElementById('pdfBtn');
+    btn.disabled = true;
+    document.body.classList.add('pdf-mode');
+    var opt = {
+      margin: [8, 8, 10, 8],
+      filename: filename,
+      image: { type: 'jpeg', quality: 0.96 },
+      html2canvas: { scale: 2, useCORS: true, logging: false, scrollY: 0, windowWidth: 1100 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['css', 'legacy'], avoid: ['.stage', '.card', '.funnel-step', 'tr', '.res-list li', '.ref-list li', '.key-point', '.note', '.section-header', '.loop', '.checklist li'] }
+    };
+    html2pdf().set(opt).from(document.getElementById('content-to-export')).save()
+      .catch(function () { window.print(); })
+      .then(function () { document.body.classList.remove('pdf-mode'); btn.disabled = false; });
+  }
+</script>
+</body>
+</html>
